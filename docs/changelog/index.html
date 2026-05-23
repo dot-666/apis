@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="page-description" name="description" content="Change log for TKM-API by Takudzwa Mlambo (Cod3Uchiha)">
+    <link rel="icon" href="/image/file.enc.jpg">
+    <title>TKM-API Change Log</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/tkm.css">
+</head>
+<body class="pt-16 pb-10">
+
+    <div id="side-nav-toggle" class="side-nav-toggle">
+        <span class="material-icons">menu</span>
+    </div>
+    
+    <div id="side-nav" class="side-nav">
+        <nav class="side-nav-links">  
+            <a href="/" class="side-nav-link">  
+                <i class="fas fa-home"></i>  
+                <span>Home</span>  
+            </a>  
+            <a href="https://youtube.com/@TKM-mods" target="_blank" class="side-nav-link">  
+                <i class="fab fa-youtube"></i>  
+                <span>YouTube</span>  
+            </a>  
+            <a href="/changelog/" class="side-nav-link active">  
+                <i class="fas fa-list"></i>  
+                <span>Change Log</span>  
+            </a>
+            <a href="https://github.com/Cod3Uchiha" target="_blank" class="side-nav-link">  
+                <i class="fab fa-github"></i>  
+                <span>GitHub</span>  
+            </a>  
+        </nav>
+    </div>
+
+    <nav class="w-full mx-auto fixed top-0 z-20 bg-white shadow-sm" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">  
+        <div class="max-w-3xl mx-auto px-5">  
+            <div class="flex items-center justify-end h-16">  
+                <a href="https://Youtube.com/@TKM-mods" target="_blank" class="flex items-center px-3 py-1.5 rounded-full bg-red-500 text-white text-sm">  
+                    <i class="fab fa-youtube mr-1.5"></i>  
+                    <span class="font-medium">Support</span>  
+                </a>  
+            </div>  
+        </div>  
+    </nav>  
+
+    <div class="px-5 max-w-3xl mx-auto content-wrapper" id="content-wrapper">
+        <div id="banner" class="tkm-card p-5 my-6">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-800">TKM-API Change Log</h2>
+                    <div class="mt-1 text-xs font-medium text-gray-500">by Cod3Uchiha</div>
+                </div>
+                <div class="h-12 w-12 bg-gray-800 rounded-full flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">TKM</span>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4">All updates and version changes for TKM-API</p>
+            <div class="tkm-divider my-4"></div>
+
+            <div id="change-log" class="space-y-3 text-sm text-gray-700"></div>
+        </div>
+    </div>
+
+    <footer class="main-footer mt-16 border-t border-gray-100 py-6">
+        <div class="max-w-3xl mx-auto px-5">
+            <div class="footer-content flex flex-col md:flex-row items-center justify-between">
+                <div class="copyright text-sm text-gray-500 mb-4 md:mb-0">
+                    © 2025 TKM-API by Takudzwa Mlambo (Cod3Uchiha)
+                </div>
+                <div class="footer-middle hidden md:block">
+                    <div class="h-8 w-8 bg-gray-800 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xs">TKM</span>
+                    </div>
+                </div>
+                <div class="footer-links flex items-center space-x-4">
+                    <a href="https://github.com/Cod3Uchiha" target="_blank" class="footer-link flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+                        <i class="fab fa-github mr-1"></i><span class="text-sm">GitHub</span>
+                    </a>
+                    <a href="https://Youtube.com/@TKM-mods" target="_blank" class="footer-link flex items-center text-gray-600 hover:text-red-600 transition-colors">
+                        <i class="fab fa-youtube mr-1"></i><span class="text-sm">YouTube</span>
+                    </a>
+                    <a href="https://wa.me/263785028126" target="_blank" class="footer-link flex items-center text-gray-600 hover:text-green-500 transition-colors">
+                        <i class="fab fa-whatsapp mr-1"></i><span class="text-sm">WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            <div class="flex justify-center mt-6">
+                <div class="text-xs text-gray-400 flex items-center">
+                    Made with <span class="material-icons text-red-500 mx-1" style="font-size: 14px;">favorite</span> by TKM
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="/script.js"></script>    
+    <script src="/tkm.js"></script>    
+    <script>
+        const changeLog = [
+            { version: "1.0.5", date: "2025-10-18", changes: ["Replaced dead Ai endpoints","Added base 64 converter","Updated Npm Packages"] },
+            { version: "1.0.4", date: "2025-07-23", changes: ["Added support for additional fonts and color schemes","Improved error handling for missing parameters"] },
+            { version: "1.0.3", date: "2025-06-01", changes: ["Added new API endpoint for generating book-style images"] },
+            { version: "1.0.2", date: "2025-05-11", changes: ["Fixed issue with error handling on missing parameters"] },
+            { version: "1.0.1", date: "2025-05-10", changes: ["Initial public release of TKM-API"] }
+        ];
+        const container = document.getElementById('change-log');
+        container.innerHTML = changeLog.map((entry, index) => `
+            <div class="bg-gray-50 border border-gray-100 rounded-xl">
+                <button class="w-full flex justify-between items-center px-4 py-3 focus:outline-none focus:ring hover:bg-gray-100" onclick="toggleChangeLog(${index})">
+                    <span class="font-medium text-gray-800">v${entry.version} - ${entry.date}</span>
+                    <span id="toggle-icon-${index}" class="material-icons text-gray-500">expand_more</span>
+                </button>
+                <div id="changes-${index}" class="px-4 pb-3 hidden">
+                    <ul class="list-disc ml-5 mt-2 space-y-1">
+                        ${entry.changes.map(change => `<li>${change}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `).join('');
+        function toggleChangeLog(index) {
+            const changesDiv = document.getElementById(`changes-${index}`);
+            const icon = document.getElementById(`toggle-icon-${index}`);
+            if (changesDiv.classList.contains('hidden')) {
+                changesDiv.classList.remove('hidden');
+                icon.textContent = 'expand_less';
+            } else {
+                changesDiv.classList.add('hidden');
+                icon.textContent = 'expand_more';
+            }
+        }
+    </script>
+
+</body>
+</html>
