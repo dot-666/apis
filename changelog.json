@@ -1,0 +1,56 @@
+[
+  {
+    "version": "1.0.0",
+    "date": "2025-01-01",
+    "changes": [
+      "Initial release of TKM-API",
+      "Added basic API endpoints",
+      "Implemented authentication system"
+    ]
+  },
+  {
+    "version": "1.1.0",
+    "date": "2025-02-10",
+    "changes": [
+      "Added image generation API endpoint",
+      "Improved response times",
+      "Fixed minor authentication bugs"
+    ]
+  },
+  {
+    "version": "1.2.0",
+    "date": "2025-03-25",
+    "changes": [
+      "Added JSON-based changelog fetching",
+      "UI improvements on API dashboard",
+      "Security patches applied"
+    ]
+  },
+  {
+    "version": "1.3.0",
+    "date": "2025-05-12",
+    "changes": [
+      "Added support for multiple API keys",
+      "Optimized database queries",
+      "Improved error handling for invalid requests"
+    ]
+  },
+  {
+    "version": "1.4.0",
+    "date": "2025-07-01",
+    "changes": [
+      "Added new endpoint: generate book-style images",
+      "Updated TailwindCSS to latest version",
+      "Minor bug fixes and performance improvements"
+    ]
+  },
+  {
+    "version": "1.5.0",
+    "date": "2025-08-20",
+    "changes": [
+      "Introduced collapsible changelog on frontend",
+      "Added expand/collapse icons",
+      "Enhanced mobile responsiveness"
+    ]
+  }
+]

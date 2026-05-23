@@ -1,0 +1,30 @@
+{
+  "name": "TKM-API",
+  "version": "1.0.0",
+  "description": "fuck you",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "rynn",
+  "license": "MIT",
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "@whiskeysockets/baileys": "latest",
+    "axios": "^1.6.8",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "latest",
+    "g-i-s": "latest",
+    "js-confuser": "^1.0.0",
+    "play-dl": "^1.9.7",
+    "qrcode": "latest",
+    "rate-limit-redis": "latest",
+    "redis": "latest",
+    "uuid": "latest",
+    "yt-search": "^2.13.1"
+  }
+}
