@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="api-description" name="description" content="Fast and free api endpoints created by Takudzwa Mlambo aka (Cod3Uchiha)">
+    <link rel="icon" id="api-icon" href="/image/file.enc.jpg">
+    <title id="api-title">TKM-API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6081705001406760" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/tkm.css">
+</head>
+<body class="pt-16 pb-10">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="page-loader">
+        <div class="loader"></div>
+        <div class="loader-text">Loading API</div>
+    </div>
+
+    <!-- Side Nav Toggle -->
+    <div id="side-nav-toggle" class="side-nav-toggle">
+        <span class="material-icons" style="font-size:18px;">menu</span>
+    </div>
+
+    <!-- Side Nav -->
+    <div id="side-nav" class="side-nav">
+        <nav class="side-nav-links">
+            <a href="index.html" class="side-nav-link active">
+                <i class="fas fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="https://youtube.com/@TKM-mods" target="_blank" class="side-nav-link">
+                <i class="fab fa-youtube"></i>
+                <span>YouTube</span>
+            </a>
+            <a href="/chat/" class="side-nav-link">
+                <i class="fab fa-whatsapp"></i>
+                <span>Contact</span>
+            </a>
+            <a href="/changelog/" class="side-nav-link">
+                <i class="fas fa-list-ul"></i>
+                <span>Change Log</span>
+            </a>
+            <a href="https://github.com/Cod3Uchiha" target="_blank" class="side-nav-link">
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="w-full mx-auto fixed top-0 z-20 tkm-navbar" style="background-color:#050508;">
+        <div class="max-w-3xl mx-auto px-5">
+            <div class="flex items-center justify-end h-16">
+                <a href="https://Youtube.com/@TKM-mods" target="_blank"
+                   class="flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold text-white"
+                   style="background:linear-gradient(135deg,#ff3b3b,#cc0000); box-shadow:0 4px 16px rgba(255,0,0,0.3);">
+                    <i class="fab fa-youtube"></i>
+                    <span>Support</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="px-5 max-w-3xl mx-auto content-wrapper" id="content-wrapper">
+
+        <!-- Hero Banner -->
+        <div class="hero-banner fade-in-up" id="banner">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                Live API
+            </div>
+            <h2 id="api-name" class="hero-title">TKM-API</h2>
+            <div id="api-author" class="hero-author">by Cod3Uchiha.</div>
+            <p id="api-desc" class="hero-desc">Fast and free API endpoints</p>
+
+            <div class="stats-row">
+                <div class="stat-chip green">
+                    <i class="fas fa-circle-check"></i>
+                    <span>Free to Use</span>
+                </div>
+                <div class="stat-chip blue">
+                    <i class="fas fa-bolt"></i>
+                    <span>Fast &amp; Reliable</span>
+                </div>
+                <div class="stat-chip purple">
+                    <i class="fas fa-code"></i>
+                    <span>REST API</span>
+                </div>
+            </div>
+
+            <div class="tkm-divider"></div>
+
+            <div id="api-links" class="hero-links flex flex-col gap-1 text-sm"></div>
+
+            <div class="mt-4 flex justify-between items-center">
+                <span id="api-copyright" class="text-xs" style="color:#5c5c72;">© 2025 Cod3Uchiha. All rights reserved.</span>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+            <input
+                type="text"
+                id="api-search"
+                class="tkm-input"
+                placeholder="Search endpoints...">
+            <span class="material-icons search-icon">search</span>
+        </div>
+
+        <!-- API Content -->
+        <div class="tab-content" id="api-content"></div>
+    </div>
+
+    <!-- API Modal -->
+    <div id="api-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden flex items-center justify-center p-5 transition-opacity duration-200 ease-out opacity-0">
+        <div class="fixed inset-0 bg-black bg-opacity-30 tkm-modal opacity-0 transition-opacity duration-200 ease-out"></div>
+        <div class="relative z-10 tkm-modal-content w-full max-w-lg mx-auto transform scale-95 opacity-0 transition-all duration-200 ease-out shadow-xl">
+            <div class="modal-header-gradient">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <span id="api-method" class="method-badge method-get">GET</span>
+                        <h3 class="text-base font-semibold" id="modal-title" style="color:#f0f0f5;">API Request</h3>
+                    </div>
+                    <button id="close-modal" class="w-8 h-8 flex items-center justify-center rounded-lg transition-colors"
+                            style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); color:#9494a8;">
+                        <span class="material-icons" style="font-size:18px;">close</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="tkm-divider" style="margin-top:0;"></div>
+                <div id="params-container" class="mb-5 space-y-3"></div>
+                <button id="submit-api" class="tkm-button w-full py-3 text-center font-semibold">
+                    Send Request
+                </button>
+            </div>
+
+            <div id="response-container" class="hidden">
+                <div class="tkm-divider" style="margin:0 20px;"></div>
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold" style="color:#f0f0f5;">Response</h4>
+                        <div class="flex items-center gap-2">
+                            <span id="response-status" class="px-2 py-1 text-xs font-bold rounded-md response-status-ok">200</span>
+                            <span id="response-time" class="text-xs" style="color:#5c5c72;">200ms</span>
+                            <button id="copy-json-btn" class="hidden flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-md transition-all duration-200" style="background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.3);" title="Copy JSON">
+                                <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                <svg id="check-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span id="copy-btn-label">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                    <pre id="response-data" class="p-4 rounded-xl text-xs overflow-auto max-h-64"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer mt-16 py-8">
+        <div class="max-w-3xl mx-auto px-5">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-sm" style="color:#5c5c72;">
+                    © 2025 TKM-API by Takudzwa Mlambo (Cod3Uchiha)
+                </div>
+                <div class="flex items-center gap-5">
+                    <a href="https://github.com/Cod3Uchiha" target="_blank" class="footer-link flex items-center gap-1.5 text-sm transition-colors" style="color:#5c5c72;">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://Youtube.com/@TKM-mods" target="_blank" class="footer-link flex items-center gap-1.5 text-sm transition-colors" style="color:#5c5c72;">
+                        <i class="fab fa-youtube"></i> YouTube
+                    </a>
+                    <a href="https://wa.me/263785028126" target="_blank" class="footer-link flex items-center gap-1.5 text-sm transition-colors" style="color:#5c5c72;">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="flex justify-center mt-5">
+                <div class="text-xs flex items-center gap-1" style="color:#3c3c50;">
+                    Made with <span class="material-icons" style="font-size:13px; color:#6c63ff;">favorite</span> by TKM
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+    <script src="/tkm.js"></script>
+</body>
+</html>

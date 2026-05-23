@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Me - TKM</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Text:wght@300;400;500;600&display=swap');
+    
+    :root {
+        --tkm-bg: #f2f2f7;
+        --tkm-card: #ffffff;
+        --tkm-primary: #007aff;
+        --tkm-success: #34c759;
+        --tkm-warning: #ff9500;
+        --tkm-error: #ff3b30;
+        --tkm-gray: #8e8e93;
+        --tkm-text: #1c1c1e;
+        --tkm-text-secondary: #6e6e73;
+    }
+    
+    body {
+        font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--tkm-bg);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        background-color: var(--tkm-bg);
+        transition: opacity 0.3s ease;
+    }
+    
+    .loader {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--tkm-primary);
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+    
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+        flex: 1;
+    }
+    
+    .tkm-card {
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        background-color: var(--tkm-card);
+        overflow: hidden;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+    
+    .tkm-button {
+        border-radius: 8px;
+        background-color: #25d366; /* WhatsApp green */
+        color: white;
+        font-weight: 500;
+        padding: 14px;
+        transition: all 0.2s ease;
+        border: none;
+        width: 100%;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .tkm-button:active {
+        transform: scale(0.97);
+        opacity: 0.9;
+    }
+    
+    .tkm-button:hover {
+        background-color: #128c7e;
+    }
+    
+    .tkm-input {
+        border-radius: 8px;
+        background-color: var(--tkm-card);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 14px;
+        transition: all 0.2s ease;
+        width: 100%;
+        font-size: 16px;
+        margin-bottom: 16px;
+        font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .tkm-input:focus {
+        border-color: var(--tkm-primary);
+        box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+        outline: none;
+    }
+    
+    .tkm-divider {
+        height: 1px;
+        background-color: rgba(0, 0, 0, 0.06);
+        margin: 16px 0;
+    }
+    
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+    
+    .header-logo {
+        height: 48px;
+        width: 48px;
+        background-color: #1c1c1e;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    
+    .header-title h2 {
+        margin: 0;
+        font-size: 24px;
+        color: var(--tkm-text);
+    }
+    
+    .header-title p {
+        margin: 4px 0 0 0;
+        font-size: 14px;
+        color: var(--tkm-text-secondary);
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--tkm-text-secondary);
+        font-weight: 500;
+    }
+    
+    textarea.tkm-input {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .footer {
+        text-align: center;
+        margin-top: 24px;
+        color: var(--tkm-text-secondary);
+        font-size: 12px;
+    }
+    
+    .footer a {
+        color: var(--tkm-primary);
+        text-decoration: none;
+    }
+    
+    .footer-logo {
+        margin-bottom: 12px;
+    }
+    
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin: 16px 0;
+    }
+    
+    .footer-link {
+        color: var(--tkm-text-secondary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.2s ease;
+    }
+    
+    .footer-link:hover {
+        color: var(--tkm-text);
+    }
+    
+    .github-link:hover {
+        color: #333;
+    }
+    
+    .youtube-link:hover {
+        color: #ff0000;
+    }
+    
+    .whatsapp-link:hover {
+        color: #25d366;
+    }
+    
+    @media (max-width: 600px) {
+        body {
+            padding: 16px;
+        }
+        
+        .tkm-card {
+            padding: 16px;
+        }
+    }
+
+    .success-message {
+        background-color: var(--tkm-success);
+        color: white;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        display: none;
+        text-align: center;
+        font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div id="page-loader" class="page-loader">
+    <div class="loader"></div>
+  </div>
+
+  <div class="container">
+    <div class="tkm-card">
+      <div class="header">
+        <div class="header-title">
+          <h2>Contact TKM</h2>
+          <p>Send me a message via WhatsApp</p>
+        </div>
+        <div class="header-logo">
+          <span>TKM</span>
+        </div>
+      </div>
+      
+      <div class="tkm-divider"></div>
+      
+      <div id="success-message" class="success-message">
+        Message sent successfully! Redirecting to WhatsApp...
+      </div>
+      
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" class="tkm-input" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" class="tkm-input" placeholder="Enter your email address" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number (Optional)</label>
+          <input type="tel" id="phone" name="phone" class="tkm-input" placeholder="Enter your phone number">
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" class="tkm-input" placeholder="Type your message here..." required></textarea>
+        </div>
+        
+        <button type="submit" class="tkm-button">
+          <i class="fab fa-whatsapp"></i> Send to WhatsApp
+        </button>
+      </form>
+    </div>
+    
+    <footer class="footer">
+      <div class="footer-logo">
+        <div class="header-logo" style="margin: 0 auto; height: 32px; width: 32px; font-size: 14px;">
+          <span>TKM</span>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <a href="https://github.com/Cod3Uchiha" target="_blank" class="footer-link github-link">
+          <i class="fab fa-github"></i> <span>GitHub</span>
+        </a>
+        <a href="https://Youtube.com/@TKM-mods" target="_blank" class="footer-link youtube-link">
+          <i class="fab fa-youtube"></i> <span>YouTube</span>
+        </a>
+        <a href="https://wa.me/263785028126" target="_blank" class="footer-link whatsapp-link">
+          <i class="fab fa-whatsapp"></i> <span>WhatsApp</span>
+        </a>
+      </div>
+      
+      <div>
+        © 2025 TKM-API by Takudzwa Mlambo (Cod3Uchiha)<br>
+        <span style="display: flex; align-items: center; justify-content: center; margin-top: 8px;">
+          Made with <i class="fas fa-heart" style="color: var(--tkm-error); margin: 0 4px;"></i> by TKM
+        </span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Page Loader
+    window.addEventListener('load', function() {
+      const loader = document.getElementById('page-loader');
+      setTimeout(function() {
+        loader.style.opacity = '0';
+        setTimeout(function() {
+          loader.style.display = 'none';
+        }, 300);
+      }, 500);
+    });
+    
+    // Contact Form Submission
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const name = this.name.value.trim();
+      const email = this.email.value.trim();
+      const phone = this.phone.value.trim();
+      const message = this.message.value.trim();
+      
+      // Show success message
+      document.getElementById('success-message').style.display = 'block';
+      
+      // Format the message for WhatsApp
+      const whatsappNumber = "263775571820";
+      const text = `Name: ${name}%0AEmail: ${email}%0APhone: ${phone}%0AMessage: ${message}`;
+      const url = `https://wa.me/${whatsappNumber}?text=${text}`;
+      
+      // Redirect to WhatsApp after a short delay
+      setTimeout(function() {
+        window.open(url, "_blank");
+      }, 1000);
+    });
+  </script>
+</body>
+  </html>
