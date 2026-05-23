@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="api-description" name="description" content="Fast and free api endpoints created by Takudzwa Mlambo aka (Cod3Uchiha)">
+    <link rel="icon" href="/image/file.enc.jpg">
+    <title id="api-title">TKM-API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6081705001406760"
+     crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/tkm.css">
+</head>
+<body class="pt-16 pb-10">
+    <div id="side-nav-toggle" class="side-nav-toggle">  
+        <span class="material-icons">menu</span>  
+    </div>  
+  
+    <div id="side-nav" class="side-nav">  
+        <nav class="side-nav-links">    
+            <a href="/chat/" class="side-nav-link active">    
+                <i class="fab fa-whatsapp mr-1"></i>    
+                <span>Contact</span>    
+            </a>
+            <a href="/" class="side-nav-link">  
+                <i class="fas fa-home"></i>    
+                <span>Home</span>    
+            </a>
+            <!-- <a href="#apis" class="side-nav-link">    
+                <i class="fas fa-plug"></i>    
+                <span>APIs</span> -->    
+            </a>    
+            <a href="https://youtube.com/@TKM-mods" target="_blank" class="side-nav-link">    
+                <i class="fab fa-youtube"></i>    
+                <span>YouTube</span>    
+            </a> 
+            <a href="/changelog/" class="side-nav-link">  
+                <i class="fas fa-list"></i>  
+                <span>Change Log</span>  
+            </a>
+            <a href="https://github.com/Cod3Uchiha" target="_blank" class="side-nav-link">    
+                <i class="fab fa-github"></i>    
+                <span>GitHub</span>    
+            </a>    
+        </nav>  
+    </div>  
+
+    <nav class="w-full mx-auto fixed top-0 z-20 bg-white shadow-sm" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">    
+        <div class="max-w-3xl mx-auto px-5">    
+            <div class="flex items-center justify-end h-16">    
+                <div class="flex items-center">    
+                    <a href="https://Youtube.com/@TKM-mods" target="_blank" class="flex items-center px-3 py-1.5 rounded-full bg-red-500 text-white text-sm">    
+                        <i class="fab fa-youtube mr-1.5"></i>    
+                        <span class="font-medium">Support</span>    
+                    </a>    
+                </div>    
+            </div>    
+        </div>    
+    </nav>    
+
+    <div class="px-5 max-w-3xl mx-auto content-wrapper" id="content-wrapper">    
+        <div id="banner" class="tkm-card p-5 my-6">    
+            <div class="flex items-center justify-between mb-5">    
+                <div>    
+                    <h2 id="api-name" class="text-2xl font-semibold text-gray-800">TKM-API</h2>    
+                    <div id="api-author" class="mt-1 text-xs font-medium text-gray-500">by Cod3Uchiha.</div>    
+                </div>    
+                <div class="h-12 w-12 bg-gray-800 rounded-full flex items-center justify-center">    
+                    <span class="text-white font-bold text-lg">TKM</span>    
+                </div>    
+            </div>    
+                
+            <p id="api-desc" class="text-sm text-gray-600 mb-4">Fast and free API endpoints</p>    
+                
+            <div class="tkm-divider my-4"></div>    
+                
+            <div id="api-links" class="flex flex-col gap-2 text-sm text-gray-600"></div>    
+                
+            <div class="mt-4 pt-3 flex justify-between items-center">    
+                <span id="api-copyright" class="text-xs text-gray-400">© 2025 Cod3Uchiha. All rights reserved.</span>    
+            </div>    
+        </div>
+
+        <div class="container mx-auto px-4 mt-10">
+    <div class="bg-white shadow-md rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800">Contact TKM</h2>
+                <p class="text-sm text-gray-500">Send me a message via WhatsApp</p>
+            </div>
+        </div>
+
+        <div class="border-b border-gray-200 mb-5"></div>
+
+        <div id="success-message" class="hidden text-green-600 font-medium mb-4">
+            Message sent successfully! Redirecting to WhatsApp...
+        </div>
+
+        <form id="contactForm" class="space-y-5">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                <input type="text" id="name" name="name" required
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-4 py-2" 
+                    placeholder="Enter your full name">
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+                <input type="email" id="email" name="email" required
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-4 py-2" 
+                    placeholder="Enter your email address">
+            </div>
+
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+                <input type="tel" id="phone" name="phone"
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-4 py-2" 
+                    placeholder="Enter your phone number">
+            </div>
+
+            <div>
+                <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                <textarea id="message" name="message" required rows="4"
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-4 py-2 resize-none" 
+                    placeholder="Type your message here..."></textarea>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-green-500 hover:bg-green-600 transition-colors text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-lg"></i> Send to WhatsApp
+            </button>
+        </form>
+    </div>
+                    </div>
+    </div>
+
+    <footer class="main-footer mt-16 border-t border-gray-100 py-6">  
+        <div class="max-w-3xl mx-auto px-5">  
+            <div class="footer-content flex flex-col md:flex-row items-center justify-between">  
+                <div class="copyright text-sm text-gray-500 mb-4 md:mb-0">  
+                    © 2025 TKM-API by Takudzwa Mlambo (Cod3Uchiha)  
+                </div>  
+                  
+                <div class="footer-middle hidden md:block">  
+                    <div class="h-8 w-8 bg-gray-800 rounded-full flex items-center justify-center">  
+                        <span class="text-white font-bold text-xs">TKM</span>  
+                    </div>  
+                </div>  
+                  
+                <div class="footer-links flex items-center space-x-4">  
+                    <a href="https://github.com/Cod3Uchiha" target="_blank" class="footer-link flex items-center text-gray-600 hover:text-gray-900 transition-colors">  
+                        <i class="fab fa-github mr-1"></i> <span class="text-sm">GitHub</span>  
+                    </a>  
+                    <a href="https://Youtube.com/@TKM-mods" target="_blank" class="footer-link flex items-center text-gray-600 hover:text-red-600 transition-colors">  
+                        <i class="fab fa-youtube mr-1"></i> <span class="text-sm">YouTube</span>  
+                    </a>  
+                    <a href="https://wa.me/263785028126" target="_blank" class="footer-link flex items-center text-gray-600 hover:text-green-500 transition-colors">  
+                        <i class="fab fa-whatsapp mr-1"></i> <span class="text-sm">WhatsApp</span>  
+                    </a>  
+                </div>  
+            </div>  
+              
+            <div class="flex justify-center mt-6">  
+                <div class="text-xs text-gray-400 flex items-center">  
+                    Made with <span class="material-icons text-red-500 mx-1" style="font-size: 14px;">favorite</span> by TKM  
+                </div>  
+            </div>  
+        </div>  
+    </footer>  
+
+    <script src="/script.js"></script>    
+    <script src="/tkm.js"></script>    
+    <script>  
+        // Contact Form Submission  
+        document.getElementById("contactForm").addEventListener("submit", function(e) {  
+            e.preventDefault();  
+            
+            const name = this.name.value.trim();  
+            const email = this.email.value.trim();  
+            const phone = this.phone.value.trim();  
+            const message = this.message.value.trim();  
+            
+            document.getElementById('success-message').style.display = 'block';  
+            
+            const whatsappNumber = "263714406565";  
+            const text = `Name: ${name}%0AEmail: ${email}%0APhone: ${phone}%0AMessage: ${message}`;  
+            const url = `https://wa.me/${whatsappNumber}?text=${text}`;  
+            
+            setTimeout(function() {  
+                window.open(url, "_blank");  
+            }, 1000);  
+        });
+    </script>
+</body>
+</html>
