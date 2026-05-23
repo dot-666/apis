@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TKM-API Admin Panel</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { font-family: sans-serif; background: #f5f5f5; }
+.container { max-width: 900px; margin: auto; padding: 2rem; }
+.card { background: #fff; border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { border: 1px solid #ddd; padding: 0.75rem; text-align: left;}
+.table th { background: #f3f3f3; }
+button { cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-2xl font-bold mb-6">TKM-API Admin Panel</h1>
+
+    <div class="card">
+        <h2 class="text-xl font-semibold mb-4">Add New API Key</h2>
+        <form id="addKeyForm" class="space-y-3">
+            <input type="text" id="newKey" placeholder="API Key" class="w-full border rounded px-3 py-2" required />
+            <input type="text" id="rateLimit" placeholder="Rate Limit e.g. 10/minute" class="w-full border rounded px-3 py-2" required />
+            <label><input type="checkbox" id="enabled" checked /> Enabled</label>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Key</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2 class="text-xl font-semibold mb-4">API Keys</h2>
+        <table class="table" id="keysTable">
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Rate Limit</th>
+                    <th>Enabled</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+const ADMIN_KEY = "super-secret-admin-key"; // match your admin.js auth
+
+async function fetchKeys() {
+    const res = await fetch(`/admin-api/keys?adminKey=${ADMIN_KEY}`);
+    const data = await res.json();
+    const tbody = document.querySelector('#keysTable tbody');
+    tbody.innerHTML = '';
+    if(data.keys){
+        data.keys.forEach(k=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${k.key}</td>
+                <td>${k.rateLimit}</td>
+                <td>${k.enabled ? '✅' : '❌'}</td>
+                <td>
+                    <button onclick="toggleKey('${k.key}')">Toggle</button>
+                    <button onclick="deleteKey('${k.key}')">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+}
+
+async function addKey(e){
+    e.preventDefault();
+    const key = document.getElementById('newKey').value.trim();
+    const rateLimit = document.getElementById('rateLimit').value.trim();
+    const enabled = document.getElementById('enabled').checked;
+    await fetch(`/admin-api/add-key`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ key, rateLimit, enabled, adminKey: ADMIN_KEY })
+    });
+    document.getElementById('addKeyForm').reset();
+    fetchKeys();
+}
+
+async function toggleKey(key){
+    await fetch(`/admin-api/toggle-key`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ key, adminKey: ADMIN_KEY })
+    });
+    fetchKeys();
+}
+
+async function deleteKey(key){
+    if(!confirm('Delete this API key?')) return;
+    await fetch(`/admin-api/delete-key`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ key, adminKey: ADMIN_KEY })
+    });
+    fetchKeys();
+}
+
+document.getElementById('addKeyForm').addEventListener('submit', addKey);
+fetchKeys();
+</script>
+</body>
+</html>
