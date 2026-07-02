@@ -18,9 +18,8 @@ module.exports = {
         }
     ],
 
-    requireApikey: true, 
+    requireApikey: true,
     apikeys: {
-        'tkm': { enabled: true, rateLimit: '1000/day' },
-        'cod3uchiha': { enabled: false, rateLimit: '3/hour' }
+        'supreme': { enabled: true, rateLimit: '1000/day' }
     }
 };
