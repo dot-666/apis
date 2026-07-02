@@ -1,5 +1,11 @@
 
         // Add tkm-like functionality and animations  
+        // ── Theme toggle (runs immediately to avoid flash) ──────────────────
+        (function () {
+            const saved = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+
         document.addEventListener('DOMContentLoaded', function() {  
             // Hide loader after page loads  
             setTimeout(() => {  
@@ -11,6 +17,27 @@
                     }, 300);  
                 }  
             }, 300);
+
+            // ── Theme toggle button ──────────────────────────────────────────
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon   = document.getElementById('theme-icon');
+
+            function applyTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                if (themeIcon) themeIcon.textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
+            }
+
+            // Sync icon with current state
+            const current = localStorage.getItem('theme') || 'dark';
+            if (themeIcon) themeIcon.textContent = current === 'light' ? 'dark_mode' : 'light_mode';
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const now = document.documentElement.getAttribute('data-theme') || 'dark';
+                    applyTheme(now === 'dark' ? 'light' : 'dark');
+                });
+            }
             
             // Side navigation functionality
             const sideNav = document.getElementById('side-nav');
