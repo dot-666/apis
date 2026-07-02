@@ -1,93 +1,117 @@
-const { createClient } = require('redis');
+'use strict';
+
 const settings = require('./settings');
 
-const client = createClient({
-    username: 'default',
-    password: 'xR5oX4ic7EDkIYKNhyISZmQmPR71fEbB',
-    socket: {
-        host: 'redis-18464.c124.us-central1-1.gce.redns.redis-cloud.com',
-        port: 18464,
-    },
-});
+// ── Redis setup (env-var driven, graceful degradation) ─────────────────────────
+let client       = null;
+let redisReady   = false;
+let redisEnabled = false;
 
-client.on('error', (err) => console.error('[Redis] Client Error:', err));
+function buildRedisConfig() {
+    // Standard Redis URL (Heroku Redis, Railway, Render, Redis Cloud all use this)
+    if (process.env.REDIS_URL) return { url: process.env.REDIS_URL };
 
-let redisReady = false;
+    // Individual vars fallback (Redis Cloud / custom)
+    if (process.env.REDIS_HOST) {
+        return {
+            username: process.env.REDIS_USERNAME || 'default',
+            password: process.env.REDIS_PASSWORD  || undefined,
+            socket: {
+                host: process.env.REDIS_HOST,
+                port: parseInt(process.env.REDIS_PORT || '6379', 10),
+                tls:  process.env.REDIS_TLS === 'true',
+            },
+        };
+    }
+
+    return null;
+}
+
+const redisCfg = buildRedisConfig();
+
+if (redisCfg) {
+    try {
+        const { createClient } = require('redis');
+        client = createClient(redisCfg);
+        client.on('error', (err) => {
+            console.error('[Redis] Client Error:', err.message);
+            redisReady = false;
+        });
+        redisEnabled = true;
+    } catch (e) {
+        console.warn('[Redis] Failed to initialise client:', e.message);
+    }
+} else {
+    console.warn('[Redis] No REDIS_URL / REDIS_HOST env var found — rate limiting disabled.');
+}
+
 async function ensureRedis() {
-    if (!redisReady) {
+    if (!redisEnabled || !client) return false;
+    if (redisReady) return true;
+    try {
         await client.connect();
         redisReady = true;
         console.log('[Redis] Connected');
+        return true;
+    } catch (e) {
+        console.error('[Redis] Connection failed:', e.message);
+        return false;
     }
 }
 
 function periodToSeconds(period) {
-    const mapping = { minute: 60, hour: 3600, day: 86400 };
-    return mapping[period] || mapping.day;
+    return { minute: 60, hour: 3600, day: 86400 }[period] ?? 86400;
 }
 
-/**
- * Advanced API Key & Rate Limit Wrapper (JSON-only)
- * @param {Function} runFn - original plugin run function
- * @param {Object} options - optional advanced settings
- */
+// ── Wrapper ────────────────────────────────────────────────────────────────────
 function wrap(runFn, options = {}) {
     const messages = {
-        missingKey: 'Missing API key parameter.',
-        invalidKey: 'Invalid or disabled API key.',
-        limitReached: 'Rate limit reached. Please contact the owner to purchase a higher limit API key.',
-        ...options.messages
+        missingKey:   'Missing API key parameter.',
+        invalidKey:   'Invalid or disabled API key.',
+        limitReached: 'Rate limit reached. Please contact the owner for a higher-limit key.',
+        ...options.messages,
     };
 
     return async function (req, res) {
-        console.log('[Wrapper] Called:', req.path, 'API key:', req.query.apikey);
+        // Bypass: noLimit endpoints or requireApikey is off globally
+        if (options.bypass || !settings.requireApikey) return runFn(req, res);
 
-        if (!settings.requireApikey) return runFn(req, res);
+        const key     = req.query.apikey;
+        if (!key) return res.status(400).json({ status: false, error: messages.missingKey });
+
+        const keyData = settings.apikeys[key];
+        if (!keyData || !keyData.enabled)
+            return res.status(401).json({ status: false, error: messages.invalidKey });
+
+        // If Redis not available, allow the request (degrade gracefully)
+        const ok = await ensureRedis();
+        if (!ok) return runFn(req, res);
 
         try {
-            await ensureRedis();
-
-            const key = req.query.apikey;
-            if (!key) return res.status(400).json({ status: false, error: messages.missingKey });
-
-            const keyData = settings.apikeys[key];
-            if (!keyData || !keyData.enabled) return res.status(401).json({ status: false, error: messages.invalidKey });
-
-            const [limitCount, period] = keyData.rateLimit?.split('/') || ['100', 'day'];
-            const max = parseInt(limitCount, 10) || 100;
-            const ttl = periodToSeconds(period);
-
+            const [limitCount, period] = (keyData.rateLimit || '100/day').split('/');
+            const max      = parseInt(limitCount, 10) || 100;
+            const ttl      = periodToSeconds(period);
             const redisKey = `rate:${key}`;
-            let count = parseInt(await client.get(redisKey)) || 0;
+
+            let count = parseInt(await client.get(redisKey), 10) || 0;
 
             if (count >= max) {
                 const ttlRemaining = await client.ttl(redisKey);
                 return res.status(429).json({
-                    status: false,
-                    error: messages.limitReached,
-                    resetInSeconds: ttlRemaining,
-                    rateLimit: `${max}/${period}`,
+                    status:            false,
+                    error:             messages.limitReached,
+                    resetInSeconds:    ttlRemaining,
+                    rateLimit:         `${max}/${period}`,
                     requestsRemaining: 0,
                 });
             }
 
-            if (count === 0) {
-                await client.set(redisKey, 1, { EX: ttl });
-                count = 1;
-            } else {
-                count = await client.incr(redisKey);
-            }
-
-            const requestsRemaining = max - count;
-
-            // Optional soft-limit warning
-            if (options.softLimitWarning && requestsRemaining <= options.softLimitWarning) {
-                console.log(`[Wrapper] Warning: Approaching rate limit. ${requestsRemaining} requests left.`);
-            }
+            if (count === 0) await client.set(redisKey, 1, { EX: ttl });
+            else             await client.incr(redisKey);
 
         } catch (err) {
-            console.error('[Redis] Error:', err);
-            return res.status(500).json({ status: false, error: 'Internal Server Error' });
+            // Redis error mid-request — let the call through rather than block the user
+            console.error('[Redis] Rate-limit check failed:', err.message);
         }
 
         return runFn(req, res);
