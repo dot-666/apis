@@ -1,9 +1,6 @@
-const { execFile } = require('child_process');
-const axios         = require('axios');
-const { promisify } = require('util');
-const yts           = require('yt-search');
-
-const execFileAsync = promisify(execFile);
+const axios    = require('axios');
+const yts      = require('yt-search');
+const savetube = require('../../lib/savetube');
 
 module.exports = {
     name: 'Spotify',
@@ -13,12 +10,8 @@ module.exports = {
     async run(req, res) {
         const { url } = req.query;
         if (!url) return res.status(400).json({ status: false, error: 'url is required' });
-
         try {
-            const result = await spotify(url);
-            const base = `${req.protocol}://${req.get('host')}`;
-            result.url = `${base}/stream?url=${encodeURIComponent(result.url)}`;
-            res.json(result);
+            res.json(await spotify(url));
         } catch (e) {
             res.status(500).json({ status: false, error: e.message });
         }
@@ -40,47 +33,35 @@ function formatDuration(seconds) {
     return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
 
-// ── Scrape Spotify page for track metadata ────────────────────────────────────
-// Uses a social-bot User-Agent to get server-rendered og: tags
+// ── Scrape Spotify page for metadata (bot UA gets server-rendered og: tags) ──
 
 async function scrapeSpotifyMeta(trackId) {
     const { data: html } = await axios.get(
         `https://open.spotify.com/track/${trackId}`,
-        {
-            headers: {
-                'User-Agent':      'Twitterbot/1.0',
-                'Accept-Language': 'en-US,en;q=0.9',
-            },
-            timeout: 12000,
-        }
+        { headers: { 'User-Agent': 'Twitterbot/1.0', 'Accept-Language': 'en-US,en;q=0.9' }, timeout: 12000 }
     );
 
-    const get = (prop) =>
+    const get = prop =>
         html.match(new RegExp(`<meta[^>]+property="${prop}"[^>]+content="([^"]+)"`))?.[1] ||
-        html.match(new RegExp(`<meta[^>]+content="([^"]+)"[^>]+property="${prop}"`))?.[1] ||
-        null;
+        html.match(new RegExp(`<meta[^>]+content="([^"]+)"[^>]+property="${prop}"`))?.[1] || null;
 
     const title = get('og:title');
     const desc  = get('og:description'); // "Artist · Album · Song · Year"
     const image = get('og:image');
 
-    // Parse description: "Ed Sheeran · ÷ (Deluxe) · Song · 2017"
     let artist = null, album = null;
     if (desc) {
         const parts = desc.split('·').map(p => p.trim()).filter(Boolean);
-        // parts[0] = artist, parts[1] = album (skip "Song" / "Single" entries)
-        if (parts[0] && !/^\d{4}$/.test(parts[0]) && parts[0].toLowerCase() !== 'song' && parts[0].toLowerCase() !== 'single') {
+        if (parts[0] && !/^\d{4}$/.test(parts[0]) && !['song','single'].includes(parts[0].toLowerCase()))
             artist = parts[0];
-        }
-        if (parts[1] && parts[1].toLowerCase() !== 'song' && parts[1].toLowerCase() !== 'single' && !/^\d{4}$/.test(parts[1])) {
+        if (parts[1] && !/^\d{4}$/.test(parts[1]) && !['song','single'].includes(parts[1].toLowerCase()))
             album = parts[1];
-        }
     }
 
     return { title, artist, album, thumbnail: image };
 }
 
-// ── Get thumbnail from Spotify oEmbed (higher quality) ───────────────────────
+// ── Get high-res thumbnail from Spotify oEmbed ────────────────────────────────
 
 async function getOembedThumb(trackId) {
     try {
@@ -89,39 +70,7 @@ async function getOembedThumb(trackId) {
             { timeout: 8000 }
         );
         return data.thumbnail_url || null;
-    } catch (_) {
-        return null;
-    }
-}
-
-// ── Search YouTube for best match and get audio stream ───────────────────────
-
-async function searchYouTube(query) {
-    const result = await yts({ query, category: 'music' });
-    const videos = result.videos || [];
-    if (!videos.length) throw new Error('No YouTube match found for: ' + query);
-    return videos[0];
-}
-
-async function getAudioStream(youtubeUrl) {
-    const { stdout } = await execFileAsync('yt-dlp', [
-        '--no-playlist',
-        '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio',
-        '--dump-json',
-        '--no-warnings',
-        '--quiet',
-        youtubeUrl,
-    ], { timeout: 30000 });
-
-    const info = JSON.parse(stdout.trim());
-    if (!info.url) throw new Error('yt-dlp did not return a stream URL');
-
-    return {
-        url:      info.url,
-        ext:      info.ext   || 'webm',
-        bitrate:  info.abr   || info.tbr || null,
-        duration: info.duration != null ? formatDuration(info.duration) : null,
-    };
+    } catch (_) { return null; }
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -129,7 +78,6 @@ async function getAudioStream(youtubeUrl) {
 async function spotify(rawUrl) {
     const trackId = extractTrackId(rawUrl);
 
-    // Fetch Spotify metadata + oEmbed thumbnail in parallel
     const [meta, oembedThumb] = await Promise.all([
         scrapeSpotifyMeta(trackId),
         getOembedThumb(trackId),
@@ -137,31 +85,33 @@ async function spotify(rawUrl) {
 
     if (!meta.title) throw new Error('Could not retrieve track metadata from Spotify');
 
-    const title     = meta.title;
-    const artist    = meta.artist || null;
-    const album     = meta.album  || null;
     const thumbnail = oembedThumb || meta.thumbnail || null;
 
-    // Search YouTube: "Title Artist" for best match
-    const query     = artist ? `${title} ${artist}` : title;
-    const ytVideo   = await searchYouTube(query);
+    // Search YouTube for the best match
+    const query   = meta.artist ? `${meta.title} ${meta.artist}` : meta.title;
+    const ytRes   = await yts({ query, category: 'music' });
+    const ytVideo = ytRes.videos?.[0];
+    if (!ytVideo) throw new Error('No YouTube match found for: ' + query);
 
-    // Get audio stream from YouTube match
-    const stream = await getAudioStream(ytVideo.url);
+    // Get the YouTube video ID and fetch audio from savetube CDN
+    const ytIdMatch = ytVideo.url.match(/[?&]v=([a-zA-Z0-9_-]{11})|youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    const videoId   = ytIdMatch?.[1] || ytIdMatch?.[2];
+    if (!videoId) throw new Error('Could not extract YouTube video ID');
+
+    const cdnData = await savetube.getAudioUrl(videoId);
 
     const result = {
-        status:    true,
-        title,
-        url:       stream.url,
-        thumbnail,
-        source:    `https://open.spotify.com/track/${trackId}`,
-        format:    stream.ext,
-        bitrate:   stream.bitrate ? `${Math.round(stream.bitrate)}kbps` : null,
-        duration:  stream.duration,
+        status:      true,
+        title:       meta.title,
+        downloadUrl: cdnData.downloadUrl,
+        thumbnail:   cdnData.thumbnail || thumbnail,
+        source:      `https://open.spotify.com/track/${trackId}`,
+        format:      'mp3',
+        duration:    cdnData.duration ? formatDuration(cdnData.duration) : null,
     };
 
-    if (artist) result.artist = artist;
-    if (album)  result.album  = album;
+    if (meta.artist) result.artist = meta.artist;
+    if (meta.album)  result.album  = meta.album;
 
     return result;
 }

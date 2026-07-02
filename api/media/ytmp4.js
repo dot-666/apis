@@ -64,7 +64,7 @@ async function ytmp4(url) {
     return {
         status: true,
         title,
-        url: conv.downloadURL,
+        downloadUrl: conv.downloadURL,
         thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
         source: `https://www.youtube.com/watch?v=${id}`
     };
