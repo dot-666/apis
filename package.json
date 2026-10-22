@@ -1,0 +1,27 @@
+{
+  "name": "supreme-media-api",
+  "version": "1.1.0",
+  "description": "Supreme Media APIs by supreme (vinpink2)",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "author": "supreme (vinpink2)",
+  "license": "MIT",
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "axios": "^1.6.8",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.0.0",
+    "express": "^4.19.2",
+    "play-dl": "^1.9.7",
+    "redis": "latest",
+    "uuid": "latest",
+    "yt-search": "^2.13.1"
+  }
+}
